@@ -23,7 +23,9 @@ npm run build
 ## GitHub Pages
 
 The production build is configured for the repository URL below because GitHub
-Pages publishes from the unchanged `community-blog` repository path:
+Pages uses the repository name in the site path. Even though the app/package is
+named Neighbourhood Notes, this repository is still `community-blog`, so the
+published path stays:
 `https://madmaxxbitch.github.io/community-blog/`.
 
 `.github/workflows/deploy-pages.yml` deploys on pushes to `main` and can also be
