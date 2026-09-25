@@ -7,9 +7,9 @@ an external service.
 
 ## Local development
 
-Requires a Node.js runtime matching `>=22.12.0 <23 || >=24 <25 || >=26 <27`
-for local work, matching the locked Vitest toolchain. The bundled GitHub Pages
-workflow runs on Node.js 24.
+Requires a Node.js runtime matching `^22.12.0 || ^24.0.0 || >=26.0.0` for local
+work, matching the locked Vitest toolchain. The bundled GitHub Pages workflow
+runs on Node.js 24.
 
 ```sh
 npm install
