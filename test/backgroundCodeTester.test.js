@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { addPost } = require('../src/posts');
-const { runCodeTestsOnce } = require('../src/backgroundCodeTester');
+const { createBackgroundCodeTester, runCodeTestsOnce } = require('../src/backgroundCodeTester');
 
 test('runCodeTestsOnce updates pending posts with pass/fail status', () => {
   const [postsAfterFirst] = addPost([], {
@@ -19,4 +19,27 @@ test('runCodeTestsOnce updates pending posts with pass/fail status', () => {
   const updated = runCodeTestsOnce(postsAfterSecond);
   assert.equal(updated[0].codeTestStatus, 'passed');
   assert.equal(updated[1].codeTestStatus, 'failed');
+});
+
+test('background tester keeps running when validator throws', () => {
+  let posts = [{
+    id: '1',
+    title: 'P',
+    content: 'C',
+    codeSnippet: 'const a = 1;',
+    codeTestStatus: 'pending',
+  }];
+
+  const tester = createBackgroundCodeTester({
+    getPosts: () => posts,
+    setPosts: (next) => {
+      posts = next;
+    },
+    validateCode: () => {
+      throw new Error('validator failed');
+    },
+  });
+
+  assert.doesNotThrow(() => tester.runNow());
+  assert.equal(posts[0].codeTestStatus, 'pending');
 });

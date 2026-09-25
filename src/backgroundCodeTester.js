@@ -23,8 +23,12 @@ const createBackgroundCodeTester = ({ getPosts, setPosts, validateCode = validat
   let timer = null;
 
   const tick = () => {
-    const updatedPosts = runCodeTestsOnce(getPosts(), validateCode);
-    setPosts(updatedPosts);
+    try {
+      const updatedPosts = runCodeTestsOnce(getPosts(), validateCode);
+      setPosts(updatedPosts);
+    } catch (_error) {
+      // Keep background processing alive for subsequent runs.
+    }
   };
 
   return {

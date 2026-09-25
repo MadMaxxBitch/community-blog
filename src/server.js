@@ -30,7 +30,7 @@ const readJsonBody = (req) =>
       receivedBytes += chunk.length;
       if (receivedBytes > MAX_BODY_BYTES) {
         hasEnded = true;
-        req.pause();
+        req.resume();
         reject(new Error('request body too large'));
         return;
       }
