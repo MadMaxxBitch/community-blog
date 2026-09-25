@@ -7,9 +7,7 @@ an external service.
 
 ## Local development
 
-Requires a Node.js runtime matching `^22.12.0 || ^24.0.0 || >=26.0.0` for local
-work, matching the locked Vitest toolchain. The bundled GitHub Pages workflow
-runs on Node.js 24.
+Requires Node.js 24 or later.
 
 ```sh
 npm install
@@ -23,10 +21,7 @@ npm run build
 
 ## GitHub Pages
 
-The production build is configured for the repository URL below because GitHub
-Pages uses the repository name in the site path. Even though the app/package is
-named Neighbourhood Notes, this repository is still `community-blog`, so the
-published path stays:
+The production build is configured for the repository URL:
 `https://madmaxxbitch.github.io/community-blog/`.
 
 `.github/workflows/deploy-pages.yml` deploys on pushes to `main` and can also be
