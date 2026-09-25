@@ -4,7 +4,7 @@ A community platform for reading and publishing blog posts.
 
 ## Requirements
 
-- Node `^20.0.0 || ^22.0.0 || >=24.0.0` for the frontend build/test toolchain (`vitest@4.1.11` does not support Node 23)
+- Node `20.x`, `22.x`, or `24.x` for installing/building the frontend toolchain and any Vitest-based frontend tests (`npm test` still uses `node --test`, and `vitest@4.1.11` does not support Node 23)
 
 ## Run
 
