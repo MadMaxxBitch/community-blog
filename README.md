@@ -2,9 +2,14 @@
 
 A community platform for reading and publishing blog posts.
 
+## Requirements
+
+- Node `^20.0.0 || ^22.0.0 || >=24.0.0` for the frontend build/test toolchain
+
 ## Run
 
 ```bash
+npm ci
 npm start
 ```
 
@@ -20,4 +25,10 @@ If a post includes `codeSnippet`, it is queued and tested in the background for 
 
 ```bash
 npm test
+```
+
+## Build
+
+```bash
+npm run build
 ```

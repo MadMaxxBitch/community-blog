@@ -12,6 +12,9 @@
     "type": "git",
     "url": "http://localhost:26831/MadMaxxBitch/community-blog"
   },
+  "engines": {
+    "node": "^20.0.0 || ^22.0.0 || >=24.0.0"
+  },
   "keywords": [
     "blog",
     "community",
