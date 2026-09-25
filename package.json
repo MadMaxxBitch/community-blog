@@ -7,9 +7,6 @@
     "dev": "vite",
     "build": "vite build",
     "test": "vitest run"
-    "start": "node src/server.js",
-    "test": "node --test",
-    "build": "vite build"
   },
   "dependencies": {
     "react": "^18.3.1",
