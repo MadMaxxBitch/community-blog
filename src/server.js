@@ -21,12 +21,14 @@ const CLIENT_ERROR_MESSAGES = new Set([
 const readJsonBody = (req) =>
   new Promise((resolve, reject) => {
     let body = '';
+    let receivedBytes = 0;
     let hasEnded = false;
     req.on('data', (chunk) => {
       if (hasEnded) {
         return;
       }
-      if (body.length + chunk.length > MAX_BODY_BYTES) {
+      receivedBytes += chunk.length;
+      if (receivedBytes > MAX_BODY_BYTES) {
         hasEnded = true;
         req.pause();
         reject(new Error('request body too large'));
