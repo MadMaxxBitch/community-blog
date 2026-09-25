@@ -7,7 +7,8 @@ an external service.
 
 ## Local development
 
-Requires Node.js 24 or later.
+Requires Node.js 22.12+ for local work. The bundled GitHub Pages workflow runs on
+Node.js 24.
 
 ```sh
 npm install
