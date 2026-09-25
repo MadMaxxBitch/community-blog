@@ -31,6 +31,7 @@ const createBackgroundCodeTester = ({ getPosts, setPosts, validateCode = validat
     start: () => {
       if (timer) return;
       timer = setInterval(tick, intervalMs);
+      timer.unref();
     },
     stop: () => {
       if (!timer) return;

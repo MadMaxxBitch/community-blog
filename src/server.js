@@ -12,6 +12,11 @@ const createJsonResponse = (res, statusCode, payload) => {
 };
 
 const MAX_BODY_BYTES = 1_000_000;
+const CLIENT_ERROR_MESSAGES = new Set([
+  'invalid JSON body',
+  'request body too large',
+  'title and content are required',
+]);
 
 const readJsonBody = (req) =>
   new Promise((resolve, reject) => {
@@ -24,7 +29,6 @@ const readJsonBody = (req) =>
       if (body.length + chunk.length > MAX_BODY_BYTES) {
         hasEnded = true;
         reject(new Error('request body too large'));
-        req.destroy();
         return;
       }
       body += chunk;
@@ -84,7 +88,9 @@ const createApp = ({ initialPosts = [], validateCode = validateCodeSyntax, now }
         posts = nextPosts;
         createJsonResponse(res, 201, { post });
       } catch (error) {
-        createJsonResponse(res, 400, { error: error.message });
+        const statusCode = CLIENT_ERROR_MESSAGES.has(error.message) ? 400 : 500;
+        const message = statusCode === 500 ? 'internal server error' : error.message;
+        createJsonResponse(res, statusCode, { error: message });
       }
       return;
     }

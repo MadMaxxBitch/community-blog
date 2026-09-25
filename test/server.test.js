@@ -52,3 +52,26 @@ test('server returns 400 for malformed JSON payloads', async () => {
     await app.stop();
   }
 });
+
+test('server returns 500 for unexpected post creation errors', async () => {
+  const app = createApp({
+    now: () => {
+      throw new Error('clock failed');
+    },
+  });
+  const port = await app.start(0);
+
+  try {
+    const response = await fetch(`http://127.0.0.1:${port}/posts`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ title: 'T', content: 'C' }),
+    });
+
+    assert.equal(response.status, 500);
+    const payload = await response.json();
+    assert.equal(payload.error, 'internal server error');
+  } finally {
+    await app.stop();
+  }
+});
