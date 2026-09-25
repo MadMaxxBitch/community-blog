@@ -7,8 +7,8 @@ an external service.
 
 ## Local development
 
-Requires Node.js 22.12.x LTS, 24.x LTS, or newer even-numbered majors supported
-by the locked Vitest toolchain. The bundled GitHub Pages workflow runs on Node.js 24.
+Requires Node.js 22.12.x, 24.x, or 26.x for local work, matching the locked
+Vitest toolchain. The bundled GitHub Pages workflow runs on Node.js 24.
 
 ```sh
 npm install
