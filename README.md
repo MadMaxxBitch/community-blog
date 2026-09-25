@@ -1,34 +1,31 @@
-# community-blog
+# Neighbourhood Notes
 
-A community platform for reading and publishing blog posts.
+A reader-first community blog for discovering local stories, publishing notes, and
+leaving useful comments. The app ships with realistic seeded content and saves
+visitor-authored posts and comments to browser local storage, so it works without
+an external service.
 
-## Requirements
+## Local development
 
-- Node `20.x`, `22.x`, or `24.x` for installing/building the frontend toolchain and any Vitest-based frontend tests (`npm test` still uses `node --test`, and `vitest@4.1.11` does not support Node 23)
+Requires Node.js 24 or later.
 
-## Run
-
-```bash
-npm ci
-npm start
+```sh
+npm install
+npm run dev
 ```
 
-Server routes:
-
-- `GET /posts` - list posts
-- `GET /posts/:id` - read one post
-- `POST /posts` - publish a post (`title`, `content`, optional `author`, optional `codeSnippet`)
-
-If a post includes `codeSnippet`, it is queued and tested in the background for syntax validity.
-
-## Test
-
-```bash
+```sh
 npm test
-```
-
-## Build
-
-```bash
 npm run build
 ```
+
+## GitHub Pages
+
+The production build is configured for the repository URL:
+`https://madmaxxbitch.github.io/community-blog/`.
+
+`.github/workflows/deploy-pages.yml` deploys on pushes to `main` and can also be
+run manually from the Actions tab. Before the first deployment, open
+**Settings → Pages** in the GitHub repository and set **Source** to
+**GitHub Actions**. After the workflow succeeds, the app is available at the URL
+above.
