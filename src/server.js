@@ -11,13 +11,28 @@ const createJsonResponse = (res, statusCode, payload) => {
   res.end(JSON.stringify(payload));
 };
 
+const MAX_BODY_BYTES = 1_000_000;
+
 const readJsonBody = (req) =>
   new Promise((resolve, reject) => {
     let body = '';
+    let hasEnded = false;
     req.on('data', (chunk) => {
+      if (hasEnded) {
+        return;
+      }
+      if (body.length + chunk.length > MAX_BODY_BYTES) {
+        hasEnded = true;
+        reject(new Error('request body too large'));
+        req.destroy();
+        return;
+      }
       body += chunk;
     });
     req.on('end', () => {
+      if (hasEnded) {
+        return;
+      }
       if (!body) {
         resolve({});
         return;
@@ -109,6 +124,10 @@ if (require.main === module) {
   app.start(Number(process.env.PORT) || 3000).then((port) => {
     // eslint-disable-next-line no-console
     console.log(`community blog server listening on ${port}`);
+  }).catch((error) => {
+    // eslint-disable-next-line no-console
+    console.error(error.message);
+    process.exitCode = 1;
   });
 }
 

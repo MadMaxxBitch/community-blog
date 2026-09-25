@@ -23,7 +23,11 @@ const createPostRecord = (id, input, now) => {
 };
 
 const addPost = (posts, input, now = () => new Date().toISOString()) => {
-  const nextId = String(posts.length + 1);
+  const nextNumericId = posts.reduce((maxId, post) => {
+    const parsed = Number.parseInt(post.id, 10);
+    return Number.isNaN(parsed) ? maxId : Math.max(maxId, parsed);
+  }, 0) + 1;
+  const nextId = String(nextNumericId);
   const post = createPostRecord(nextId, input, now);
   return [[...posts, post], post];
 };

@@ -21,3 +21,12 @@ test('addPost creates a post and marks code snippet as pending', () => {
 test('addPost throws when required fields are missing', () => {
   assert.throws(() => addPost([], { title: 'Missing content' }), /title and content are required/);
 });
+
+test('addPost derives next id from max existing id', () => {
+  const [posts] = addPost([{ id: '4', title: 'A', content: 'B' }], {
+    title: 'Next',
+    content: 'Post',
+  });
+
+  assert.equal(posts[1].id, '5');
+});

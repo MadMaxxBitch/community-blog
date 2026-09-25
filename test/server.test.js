@@ -33,3 +33,22 @@ test('server allows publishing and reading posts', async () => {
     await app.stop();
   }
 });
+
+test('server returns 400 for malformed JSON payloads', async () => {
+  const app = createApp();
+  const port = await app.start(0);
+
+  try {
+    const response = await fetch(`http://127.0.0.1:${port}/posts`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: '{"title":"bad json",',
+    });
+
+    assert.equal(response.status, 400);
+    const payload = await response.json();
+    assert.equal(payload.error, 'invalid JSON body');
+  } finally {
+    await app.stop();
+  }
+});
