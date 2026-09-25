@@ -28,6 +28,25 @@ describe("Neighbourhood Notes", () => {
     expect(screen.getByText(/written by/i)).toHaveTextContent("You");
   });
 
+  it("reloads published local stories from browser storage", async () => {
+    const user = userEvent.setup();
+    const { unmount } = render(<App />);
+    await user.click(screen.getByRole("button", { name: /write a story/i }));
+    await user.type(screen.getByLabelText("Story title"), "The corner bakery bench");
+    await user.type(screen.getByLabelText("Short introduction"), "Still warm after the morning rush.");
+    await user.type(screen.getByLabelText("Your story"), "It catches the first sun.\n\nNow it is part of my route.");
+    await user.click(screen.getByRole("button", { name: /publish story/i }));
+    unmount();
+
+    render(<App />);
+
+    expect(screen.getByRole("button", { name: "The corner bakery bench" })).toBeInTheDocument();
+    expect(JSON.parse(localStorage.getItem("neighbourhood-notes-posts"))[0]).toMatchObject({
+      title: "The corner bakery bench",
+      author: "You",
+    });
+  });
+
   it("validates and persists a new comment on a story", async () => {
     const user = userEvent.setup();
     render(<App />);
