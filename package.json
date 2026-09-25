@@ -1,22 +1,23 @@
 {
-  "name": "community-blog",
-  "version": "1.0.0",
-  "description": "A community platform for reading and publishing blog posts.",
-  "main": "src/server.js",
+  "name": "neighbourhood-notes",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "vitest run"
     "start": "node src/server.js",
     "test": "node --test",
     "build": "vite build"
   },
-  "repository": {
-    "type": "git",
-    "url": "http://localhost:26831/MadMaxxBitch/community-blog"
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
-  "keywords": [
-    "blog",
-    "community",
-    "functional"
-  ],
+  "devDependencies": {
+    "vite": "^6.4.3"
+  },
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -27,8 +28,6 @@
     "@testing-library/user-event": "^14.6.1",
     "jsdom": "^25.0.1",
     "vite": "^6.0.3",
-    "vitest": "^3.2.6"
-  },
-  "author": "",
-  "license": "ISC"
+    "vitest": "^2.1.8"
+  }
 }
