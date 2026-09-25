@@ -1,0 +1,115 @@
+const http = require('http');
+const { addPost, getPostById, listPosts } = require('./posts');
+const {
+  createBackgroundCodeTester,
+  runCodeTestsOnce,
+  validateCodeSyntax,
+} = require('./backgroundCodeTester');
+
+const createJsonResponse = (res, statusCode, payload) => {
+  res.writeHead(statusCode, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify(payload));
+};
+
+const readJsonBody = (req) =>
+  new Promise((resolve, reject) => {
+    let body = '';
+    req.on('data', (chunk) => {
+      body += chunk;
+    });
+    req.on('end', () => {
+      if (!body) {
+        resolve({});
+        return;
+      }
+
+      try {
+        resolve(JSON.parse(body));
+      } catch (error) {
+        reject(new Error('invalid JSON body'));
+      }
+    });
+    req.on('error', reject);
+  });
+
+const createApp = ({ initialPosts = [], validateCode = validateCodeSyntax, now } = {}) => {
+  let posts = [...initialPosts];
+
+  const backgroundTester = createBackgroundCodeTester({
+    getPosts: () => posts,
+    setPosts: (nextPosts) => {
+      posts = nextPosts;
+    },
+    validateCode,
+  });
+
+  const server = http.createServer(async (req, res) => {
+    const url = new URL(req.url, 'http://localhost');
+
+    if (req.method === 'GET' && url.pathname === '/posts') {
+      createJsonResponse(res, 200, { posts: listPosts(posts) });
+      return;
+    }
+
+    if (req.method === 'GET' && url.pathname.startsWith('/posts/')) {
+      const id = url.pathname.split('/')[2];
+      const post = getPostById(posts, id);
+      if (!post) {
+        createJsonResponse(res, 404, { error: 'post not found' });
+        return;
+      }
+      createJsonResponse(res, 200, { post });
+      return;
+    }
+
+    if (req.method === 'POST' && url.pathname === '/posts') {
+      try {
+        const body = await readJsonBody(req);
+        const [nextPosts, post] = addPost(posts, body, now);
+        posts = nextPosts;
+        createJsonResponse(res, 201, { post });
+      } catch (error) {
+        createJsonResponse(res, 400, { error: error.message });
+      }
+      return;
+    }
+
+    createJsonResponse(res, 404, { error: 'route not found' });
+  });
+
+  return {
+    start: (port = 3000) =>
+      new Promise((resolve) => {
+        server.listen(port, () => {
+          backgroundTester.start();
+          resolve(server.address().port);
+        });
+      }),
+    stop: () =>
+      new Promise((resolve, reject) => {
+        backgroundTester.stop();
+        server.close((error) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve();
+        });
+      }),
+    runCodeTestsNow: () => {
+      posts = runCodeTestsOnce(posts, validateCode);
+      return listPosts(posts);
+    },
+    getPosts: () => listPosts(posts),
+  };
+};
+
+if (require.main === module) {
+  const app = createApp();
+  app.start(Number(process.env.PORT) || 3000).then((port) => {
+    // eslint-disable-next-line no-console
+    console.log(`community blog server listening on ${port}`);
+  });
+}
+
+module.exports = { createApp };

@@ -1,0 +1,21 @@
+{
+  "name": "community-blog",
+  "version": "1.0.0",
+  "description": "A community platform for reading and publishing blog posts.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://localhost:26831/MadMaxxBitch/community-blog"
+  },
+  "keywords": [
+    "blog",
+    "community",
+    "functional"
+  ],
+  "author": "",
+  "license": "ISC"
+}
