@@ -21,7 +21,8 @@ npm run build
 
 ## GitHub Pages
 
-The production build is configured for the repository URL:
+The production build is configured for the repository URL below because GitHub
+Pages publishes from the unchanged `community-blog` repository path:
 `https://madmaxxbitch.github.io/community-blog/`.
 
 `.github/workflows/deploy-pages.yml` deploys on pushes to `main` and can also be
