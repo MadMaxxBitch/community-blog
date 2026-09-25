@@ -20,6 +20,12 @@ test('server allows publishing and reading posts', async () => {
     assert.equal(createResponse.status, 201);
     const createdPayload = await createResponse.json();
     assert.equal(createdPayload.post.title, 'My first post');
+    const createdPostId = createdPayload.post.id;
+
+    const getResponse = await fetch(`http://127.0.0.1:${port}/posts/${createdPostId}`);
+    assert.equal(getResponse.status, 200);
+    const getPayload = await getResponse.json();
+    assert.equal(getPayload.post.id, createdPostId);
 
     app.runCodeTestsNow();
 
@@ -71,6 +77,29 @@ test('server returns 500 for unexpected post creation errors', async () => {
     assert.equal(response.status, 500);
     const payload = await response.json();
     assert.equal(payload.error, 'internal server error');
+  } finally {
+    await app.stop();
+  }
+});
+
+test('server returns 400 for oversized request payloads', async () => {
+  const app = createApp();
+  const port = await app.start(0);
+
+  try {
+    const tooLargeContent = 'x'.repeat(1_000_001);
+    const response = await fetch(`http://127.0.0.1:${port}/posts`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        title: 'Large',
+        content: tooLargeContent,
+      }),
+    });
+
+    assert.equal(response.status, 400);
+    const payload = await response.json();
+    assert.equal(payload.error, 'request body too large');
   } finally {
     await app.stop();
   }

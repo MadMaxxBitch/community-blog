@@ -28,6 +28,7 @@ const readJsonBody = (req) =>
       }
       if (body.length + chunk.length > MAX_BODY_BYTES) {
         hasEnded = true;
+        req.pause();
         reject(new Error('request body too large'));
         return;
       }
@@ -70,8 +71,8 @@ const createApp = ({ initialPosts = [], validateCode = validateCodeSyntax, now }
       return;
     }
 
-    if (req.method === 'GET' && url.pathname.startsWith('/posts/')) {
-      const id = url.pathname.split('/')[2];
+    if (req.method === 'GET' && /^\/posts\/[^/]+$/.test(url.pathname)) {
+      const id = url.pathname.slice('/posts/'.length);
       const post = getPostById(posts, id);
       if (!post) {
         createJsonResponse(res, 404, { error: 'post not found' });
