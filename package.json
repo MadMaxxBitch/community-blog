@@ -1,7 +1,7 @@
 {
-  "name": "community-blog",
+  "name": "neighbourhood-notes",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,11 +13,18 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "vite": "^6.4.3"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.6.1",
     "jsdom": "^25.0.1",
-    "vite": "^6.4.3",
-    "vitest": "^3.2.7"
+    "vite": "^6.0.3",
+    "vitest": "^2.1.8"
   }
 }
